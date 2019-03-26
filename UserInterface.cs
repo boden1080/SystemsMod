@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,6 @@ namespace Self_Checkout_Simulator
             scannedProducts = new ScannedProducts();
             barcodeScanner = new BarcodeScanner();
             looseItemScale = new LooseItemScale();
-            
             selfCheckout = new SelfCheckout(baggingAreaScale, scannedProducts, looseItemScale);
             barcodeScanner.LinkToSelfCheckout(selfCheckout);
             baggingAreaScale.LinkToSelfCheckout(selfCheckout);
@@ -38,16 +37,15 @@ namespace Self_Checkout_Simulator
         // Operations
         private void UserScansProduct(object sender, EventArgs e)
         {
+
             barcodeScanner.BarcodeDetected();
             UpdateDisplay();
         }
 
         private void UserPutsProductInBaggingAreaCorrect(object sender, EventArgs e)
         {
-            // NOTE: we use the correct item weight here
-            
-            // TODO
 
+            baggingAreaScale.WeightChangeDetected(difference);
             UpdateDisplay();
         }
 
@@ -56,16 +54,15 @@ namespace Self_Checkout_Simulator
             // NOTE: We are pretending to put down an item with the wrong weight.
             // To simulate this we'll use a random number, here's one for you to use.
             int weight = new Random().Next(20, 100);
-            
-            // TODO
 
+            // TODO
+            baggingAreaScale.WeightChangeDetected(difference);
             UpdateDisplay();
         }
 
         private void UserSelectsALooseProduct(object sender, EventArgs e)
         {
-            // TODO
-
+            selfCheckout.LooseProductSelected();
             UpdateDisplay();
         }
 
@@ -74,9 +71,9 @@ namespace Self_Checkout_Simulator
             // NOTE: We are pretending to weigh a banana or whatever here.
             // To simulate this we'll use a random number, here's one for you to use.
             int weight = new Random().Next(20, 100);
-            
-            // TODO
 
+            // TODO
+            looseItemScale.WeightChangeDetected(weight);
             UpdateDisplay();
         }
 
@@ -89,6 +86,7 @@ namespace Self_Checkout_Simulator
 
         private void UserChoosesToPay(object sender, EventArgs e)
         {
+
             selfCheckout.UserPaid();
             UpdateDisplay();
         }
@@ -96,7 +94,7 @@ namespace Self_Checkout_Simulator
         void UpdateDisplay()
         {
             lbBasket.Items.Clear();
-            foreach(Product p in scannedProducts.GetProducts())
+            foreach (Product p in scannedProducts.GetProducts())
             {
                 lbBasket.Items.Add(p.GetName());
             }
@@ -104,7 +102,6 @@ namespace Self_Checkout_Simulator
             lblTotalPrice.Text = Convert.ToString(scannedProducts.CalculatePrice());
             lblBaggingAreaCurrentWeight.Text = Convert.ToString(baggingAreaScale.GetCurrentWeight());
             lblBaggingAreaExpectedWeight.Text = Convert.ToString(baggingAreaScale.GetExpectedWeight());
-            // button updates do later
             // TODO: use all the information we have to update the UI:
             //     - set whether buttons are enabled
             //     - set label texts
