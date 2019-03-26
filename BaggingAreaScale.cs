@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +16,7 @@ namespace Self_Checkout_Simulator
         // Operations
         public int GetCurrentWeight()
         {
+            // TODO
             return 0;
         }
 
@@ -27,12 +28,13 @@ namespace Self_Checkout_Simulator
 
         public int GetExpectedWeight()
         {
+            
             return expected;
         }
 
         public void SetExpectedWeight(int expected)
         {
-            this.expected = expected;
+             this.expected = expected;
         }
 
         public void OverrideWeight()
@@ -55,7 +57,7 @@ namespace Self_Checkout_Simulator
         //       scale would detect the change and notify the self checkout
         public void WeightChangeDetected(int difference)
         {
-            // TODO
+            this.allowedDifference = difference;
         }
     }
 }
