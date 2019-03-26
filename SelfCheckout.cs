@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +11,7 @@ namespace Self_Checkout_Simulator
         private BaggingAreaScale baggingArea;
         private ScannedProducts scannedProducts;
         private LooseItemScale looseItemScale;
+
 
         // Constructor
         public SelfCheckout(BaggingAreaScale baggingArea, ScannedProducts scannedProducts, LooseItemScale looseItemScale)
@@ -28,7 +29,8 @@ namespace Self_Checkout_Simulator
 
         public void LooseItemAreaWeightChanged(int weightOfLooseItem)
         {
-            // TODO
+            //currentProduct.SetWeight();
+            
         }
 
         public void BarcodeWasScanned(int barcode)
