@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,12 +7,13 @@ namespace Self_Checkout_Simulator
     class LooseItemScale
     {
         // Attributes
-
+        private bool enabled;
+        private SelfCheckout selfCheckout;
 
         // Operations
         public void Enable()
         {
-            // TODO
+            enabled = true;
         }
 
         public bool IsEnabled()
@@ -23,14 +24,14 @@ namespace Self_Checkout_Simulator
 
         public void LinkToSelfCheckout(SelfCheckout sc)
         {
-            // TODO
+            selfCheckout = sc;
         }
 
         // NOTE: In reality the weight wouldn't be passed in here, the
         //       scale would detect the change and notify the self checkout
         public void WeightChangeDetected(int weight)
         {
-            // TODO
+            selfCheckout.LooseItemAreaWeightChanged(weight);
         }
     }
 }
