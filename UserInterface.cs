@@ -84,8 +84,13 @@ namespace Self_Checkout_Simulator
 
         private void UserSelectsALooseProduct(object sender, EventArgs e)
         {
-            // TODO
-
+            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
+            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
+            btnUserScansBarcodeProduct.Enabled = false;
+            btnUserSelectsLooseProduct.Enabled = false;
+            btnUserWeighsLooseProduct.Enabled = true;
+            btnUserChooseToPay.Enabled = false;
+            btnAdminOverridesWeight.Enabled = false;
             UpdateDisplay();
         }
 
