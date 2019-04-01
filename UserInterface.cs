@@ -57,7 +57,7 @@ namespace Self_Checkout_Simulator
 
         private void UserPutsProductInBaggingAreaCorrect(object sender, EventArgs e)
         {
-            baggingAreaScale.WeightChangeDetected();
+            baggingAreaScale.WeightChangeDetected(selfCheckout.GetCurrentProduct().GetWeight());
             btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
             btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
             btnUserScansBarcodeProduct.Enabled = true;
@@ -78,7 +78,7 @@ namespace Self_Checkout_Simulator
             btnUserSelectsLooseProduct.Enabled = false;
             btnUserChooseToPay.Enabled = false;
             btnAdminOverridesWeight.Enabled = true;
-
+            selfCheckout.BaggingAreaWeightChanged(weight);
             UpdateDisplay();
         }
 
@@ -91,6 +91,7 @@ namespace Self_Checkout_Simulator
             btnUserWeighsLooseProduct.Enabled = true;
             btnUserChooseToPay.Enabled = false;
             btnAdminOverridesWeight.Enabled = false;
+            selfCheckout.LooseProductSelected();
             UpdateDisplay();
         }
 
@@ -99,9 +100,7 @@ namespace Self_Checkout_Simulator
             // NOTE: We are pretending to weigh a banana or whatever here.
             // To simulate this we'll use a random number, here's one for you to use.
             int weight = new Random().Next(20, 100);
-            
-            // TODO
-
+            looseItemScale.WeightChangeDetected(weight);
             UpdateDisplay();
         }
 

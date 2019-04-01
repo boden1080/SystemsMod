@@ -16,6 +16,11 @@ namespace Self_Checkout_Simulator
             enabled = true;
         }
 
+        public void Disable()
+        {
+            enabled = false;
+        }
+
         public bool IsEnabled()
         {
             if (enabled == true)
@@ -33,7 +38,7 @@ namespace Self_Checkout_Simulator
         //       scale would detect the change and notify the self checkout
         public void WeightChangeDetected(int weight)
         {
-            
+            selfCheckout.LooseItemAreaWeightChanged(weight);
         }
     }
 }

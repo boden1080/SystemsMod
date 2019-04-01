@@ -23,23 +23,28 @@ namespace Self_Checkout_Simulator
         // Operations
         public void LooseProductSelected()
         {
-            // TODO
+            looseItemScale.Enable();
         }
 
         public void LooseItemAreaWeightChanged(int weightOfLooseItem)
         {
-            // TODO
+            currentProduct = ProductsDAO.GetRandomLooseProduct();
+            currentProduct.SetWeight(weightOfLooseItem);
+            scannedProducts.Add(currentProduct);
+            baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
+            looseItemScale.Disable();
         }
 
         public void BarcodeWasScanned(int barcode)
         {
-            scannedProducts.Add(ProductsDAO.SearchUsingBarcode(barcode));
+            currentProduct = ProductsDAO.SearchUsingBarcode(barcode);
+            scannedProducts.Add(currentProduct);
             baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
         }
 
-        public void BaggingAreaWeightChanged()
+        public void BaggingAreaWeightChanged(int changed)
         {
-           
+
         }
 
         public void UserPaid()
