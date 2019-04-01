@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,6 +40,17 @@ namespace Self_Checkout_Simulator
             return weightInGrams;
         }
 
+        public int CalculatePrice()
+        {
+            return 0;
+        }
+
+        public void SetWeight(int weightInGrams)
+        {
+            this.weightInGrams = weightInGrams;
+
+        }
+
         // TODO: Use the class diagram for details of other operations
     }
 
@@ -56,12 +67,7 @@ namespace Self_Checkout_Simulator
             this.weightInGrams = weightInGrams;
         }
 
-        // Operations
-
-        public int CalculatePrice()
-        {
-            return 0;
-        }
+       
     }
 
     class LooseProduct : Product
