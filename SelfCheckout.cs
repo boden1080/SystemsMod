@@ -12,7 +12,6 @@ namespace Self_Checkout_Simulator
         private ScannedProducts scannedProducts;
         private LooseItemScale looseItemScale;
 
-
         // Constructor
         public SelfCheckout(BaggingAreaScale baggingArea, ScannedProducts scannedProducts, LooseItemScale looseItemScale)
         {
@@ -29,8 +28,7 @@ namespace Self_Checkout_Simulator
 
         public void LooseItemAreaWeightChanged(int weightOfLooseItem)
         {
-            //currentProduct.SetWeight();
-            
+            // TODO
         }
 
         public void BarcodeWasScanned(int barcode)
@@ -41,7 +39,7 @@ namespace Self_Checkout_Simulator
 
         public void BaggingAreaWeightChanged()
         {
-            // TODO
+           
         }
 
         public void UserPaid()
@@ -52,9 +50,8 @@ namespace Self_Checkout_Simulator
 
         public string GetPromptForUser()
         {
-            // TODO: Use the information we have to produce the correct message
-            //       e.g. "Scan an item.", "Place item on scale.", etc.
-            return "ERROR: Unknown state!";
+            
+            return "Place item in the bagging area";
         }
 
         public Product GetCurrentProduct()
