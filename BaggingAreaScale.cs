@@ -16,7 +16,6 @@ namespace Self_Checkout_Simulator
         // Operations
         public int GetCurrentWeight()
         {
-            // TODO
             return 0;
         }
 
@@ -28,18 +27,17 @@ namespace Self_Checkout_Simulator
 
         public int GetExpectedWeight()
         {
-            
             return expected;
         }
 
         public void SetExpectedWeight(int expected)
         {
-             this.expected = expected;
+            this.expected = expected;
         }
 
-        public void OverrideWeight()
+        public void OverrideWeight(int expected)
         {
-            // TODO
+            this.expected = weight;
         }
 
         public void Reset()
@@ -55,9 +53,9 @@ namespace Self_Checkout_Simulator
 
         // NOTE: In reality the difference wouldn't be passed in here, the
         //       scale would detect the change and notify the self checkout
-        public void WeightChangeDetected(int difference)
+        public void WeightChangeDetected()
         {
-            this.allowedDifference = difference;
+            selfCheckout.BaggingAreaWeightChanged();
         }
     }
 }
