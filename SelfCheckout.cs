@@ -12,6 +12,7 @@ namespace Self_Checkout_Simulator
         private ScannedProducts scannedProducts;
         private LooseItemScale looseItemScale;
 
+
         // Constructor
         public SelfCheckout(BaggingAreaScale baggingArea, ScannedProducts scannedProducts, LooseItemScale looseItemScale)
         {
@@ -23,12 +24,13 @@ namespace Self_Checkout_Simulator
         // Operations
         public void LooseProductSelected()
         {
+            ProductsDAO.GetRandomLooseProduct();
             looseItemScale.Enable();
         }
 
         public void LooseItemAreaWeightChanged(int weightOfLooseItem)
         {
-            currentProduct = ProductsDAO.GetRandomLooseProduct();
+            ProductsDAO.GetRandomLooseProduct();
             currentProduct.SetWeight(weightOfLooseItem);
             scannedProducts.Add(currentProduct);
             baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
@@ -37,14 +39,13 @@ namespace Self_Checkout_Simulator
 
         public void BarcodeWasScanned(int barcode)
         {
-            currentProduct = ProductsDAO.SearchUsingBarcode(barcode);
-            scannedProducts.Add(currentProduct);
+            scannedProducts.Add(ProductsDAO.SearchUsingBarcode(barcode));
             baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
         }
 
-        public void BaggingAreaWeightChanged(int changed)
+        public void BaggingAreaWeightChanged(int weight)
         {
-
+            // TODO
         }
 
         public void UserPaid()
@@ -55,8 +56,9 @@ namespace Self_Checkout_Simulator
 
         public string GetPromptForUser()
         {
-            
-            return "Place item in the bagging area";
+            // TODO: Use the information we have to produce the correct message
+            //       e.g. "Scan an item.", "Place item on scale.", etc.
+            return "ERROR: Unknown state!";
         }
 
         public Product GetCurrentProduct()
