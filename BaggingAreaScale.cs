@@ -41,8 +41,9 @@ namespace Self_Checkout_Simulator
             this.expected = expected;
         }
 
-        public void OverrideWeight()
+        public void OverrideWeight(int expected)
         {
+            this.expected = weight;
         }
 
         public void Reset()
