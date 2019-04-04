@@ -48,8 +48,11 @@ namespace Self_Checkout_Simulator
 
         public bool HasItems()
         {
-            // TODO
-            return false;
+            foreach (Product p in products)
+            {
+                return true;
+            }
+                return false; 
         }
     }
 }
