@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +19,7 @@ namespace Self_Checkout_Simulator
         public int CalculateWeight()
         {
             int weight = 0;
-            foreach(Product p in products)
+            foreach (Product p in products)
             {
                 weight += p.GetWeight();
             }
@@ -45,6 +45,16 @@ namespace Self_Checkout_Simulator
         {
             products.Add(p);
         }
+        public Product GetProduct(int index)
+        {
+            return products[index];
+        }
+
+        public void Remove(Product p)
+        {
+            
+            products.Remove(p);
+        }
 
         public bool HasItems()
         {
@@ -52,7 +62,7 @@ namespace Self_Checkout_Simulator
             {
                 return true;
             }
-                return false; 
+            return false;
         }
     }
 }
