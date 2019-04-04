@@ -26,20 +26,11 @@ namespace Self_Checkout_Simulator
             scannedProducts = new ScannedProducts();
             barcodeScanner = new BarcodeScanner();
             looseItemScale = new LooseItemScale();
-            
+
             selfCheckout = new SelfCheckout(baggingAreaScale, scannedProducts, looseItemScale);
             barcodeScanner.LinkToSelfCheckout(selfCheckout);
             baggingAreaScale.LinkToSelfCheckout(selfCheckout);
             looseItemScale.LinkToSelfCheckout(selfCheckout);
-
-            //button enabled/disabled
-            btnUserWeighsLooseProduct.Enabled = false;
-            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
-            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
-            btnUserChooseToPay.Enabled = false;
-            btnAdminOverridesWeight.Enabled = false;
-
-            
 
             UpdateDisplay();
         }
@@ -48,21 +39,12 @@ namespace Self_Checkout_Simulator
         private void UserScansProduct(object sender, EventArgs e)
         {
             barcodeScanner.BarcodeDetected();
-            btnUserScansBarcodeProduct.Enabled = false;
-            btnUserSelectsLooseProduct.Enabled = false;
-            btnUserPutsProductInBaggingAreaCorrect.Enabled = true;
-            btnUserPutsProductInBaggingAreaIncorrect.Enabled = true;
             UpdateDisplay();
         }
 
         private void UserPutsProductInBaggingAreaCorrect(object sender, EventArgs e)
         {
             baggingAreaScale.WeightChangeDetected(selfCheckout.GetCurrentProduct().GetWeight());
-            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
-            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
-            btnUserScansBarcodeProduct.Enabled = true;
-            btnUserSelectsLooseProduct.Enabled = true;
-            btnUserChooseToPay.Enabled = true;
             UpdateDisplay();
         }
 
@@ -71,26 +53,12 @@ namespace Self_Checkout_Simulator
             // NOTE: We are pretending to put down an item with the wrong weight.
             // To simulate this we'll use a random number, here's one for you to use.
             int weight = new Random().Next(20, 100);
-
-            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
-            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
-            btnUserScansBarcodeProduct.Enabled = false;
-            btnUserSelectsLooseProduct.Enabled = false;
-            btnUserChooseToPay.Enabled = false;
-            btnAdminOverridesWeight.Enabled = true;
-            selfCheckout.BaggingAreaWeightChanged(weight);
+            baggingAreaScale.WeightChangeDetected(weight);
             UpdateDisplay();
         }
 
         private void UserSelectsALooseProduct(object sender, EventArgs e)
         {
-            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
-            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
-            btnUserScansBarcodeProduct.Enabled = false;
-            btnUserSelectsLooseProduct.Enabled = false;
-            btnUserWeighsLooseProduct.Enabled = true;
-            btnUserChooseToPay.Enabled = false;
-            btnAdminOverridesWeight.Enabled = false;
             selfCheckout.LooseProductSelected();
             UpdateDisplay();
         }
@@ -107,12 +75,7 @@ namespace Self_Checkout_Simulator
         private void AdminOverridesWeight(object sender, EventArgs e)
         {
             // TODO
-            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
-            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
-            btnAdminOverridesWeight.Enabled = false;
-            btnUserScansBarcodeProduct.Enabled = true;
-            btnUserSelectsLooseProduct.Enabled = true;
-            btnUserChooseToPay.Enabled = true;
+            selfCheckout.AdminOverrideWeight();
             UpdateDisplay();
         }
 
@@ -122,24 +85,82 @@ namespace Self_Checkout_Simulator
             UpdateDisplay();
         }
 
+        private void lbBasket_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbBasket.SelectedIndex >= 0)
+            {
+                btnRemoveProduct.Enabled = true;
+            }
+            else
+            {
+                btnRemoveProduct.Enabled = false;
+            }
+        }
+
+        private void UserRemovesProduct(object sender, EventArgs e)
+        {
+            btnAdminRemove.Enabled = true;
+        }
+
+        private void AdminConfirmation(object sender, EventArgs e)
+        {
+            int index = lbBasket.SelectedIndex;
+            selfCheckout.UserRemoved(index);
+            UpdateDisplay();
+        }
+
         void UpdateDisplay()
         {
             lbBasket.Items.Clear();
-            foreach(Product p in scannedProducts.GetProducts())
+            foreach (Product p in scannedProducts.GetProducts())
             {
                 lbBasket.Items.Add(p.GetName());
             }
             lblScreen.Text = selfCheckout.GetPromptForUser();
-            lblTotalPrice.Text = Convert.ToString(scannedProducts.CalculatePrice());
-            lblBaggingAreaCurrentWeight.Text = Convert.ToString(baggingAreaScale.GetCurrentWeight());
-            lblBaggingAreaExpectedWeight.Text = Convert.ToString(baggingAreaScale.GetExpectedWeight());
-            // button updates do later
-            // TODO: use all the information we have to update the UI:
-            //     - set whether buttons are enabled
-            //     - set label texts
-            //     - refresh the scanned products list box
+            lblTotalPrice.Text = string.Format("{0:C2}", (Convert.ToDecimal(scannedProducts.CalculatePrice()) / 100));
+            lblBaggingAreaCurrentWeight.Text = string.Format("{0:0.00}", (Convert.ToDecimal(baggingAreaScale.GetCurrentWeight())));
+            lblBaggingAreaExpectedWeight.Text = string.Format("{0:0.00}", (Convert.ToDecimal(baggingAreaScale.GetExpectedWeight())));
+            // Reset buttons
+            btnAdminOverridesWeight.Enabled = false;
+            btnUserChooseToPay.Enabled = false;
+            btnUserPutsProductInBaggingAreaCorrect.Enabled = false;
+            btnUserPutsProductInBaggingAreaIncorrect.Enabled = false;
+            btnUserScansBarcodeProduct.Enabled = false;
+            btnUserSelectsLooseProduct.Enabled = false;
+            btnUserWeighsLooseProduct.Enabled = false;
+            btnRemoveProduct.Enabled = false;
+            btnAdminRemove.Enabled = false;
+            // Enabling/Disabling buttons
+            if (!baggingAreaScale.IsWeightOk())
+            {
+                if (selfCheckout.GetCurrentProduct() == null)
+                {
+                    btnAdminOverridesWeight.Enabled = true;
+                }
+                else
+                {
+                    btnUserPutsProductInBaggingAreaCorrect.Enabled = true;
+                    btnUserPutsProductInBaggingAreaIncorrect.Enabled = true;
+                }
+            }
+            else if (looseItemScale.IsEnabled())
+            {
+                btnUserWeighsLooseProduct.Enabled = true;
+            }
+            else if (selfCheckout.GetCurrentProduct() == null)
+            {
+                btnUserScansBarcodeProduct.Enabled = true;
+                btnUserSelectsLooseProduct.Enabled = true;
+                if (scannedProducts.HasItems())
+                {
+                    btnUserChooseToPay.Enabled = true;
+                }
+            }
+            else if (selfCheckout.GetCurrentProduct() != null)
+            {
+                btnUserPutsProductInBaggingAreaCorrect.Enabled = true;
+                btnUserPutsProductInBaggingAreaIncorrect.Enabled = true;
+            }
         }
-
-       
     }
 }
