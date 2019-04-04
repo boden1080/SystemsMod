@@ -64,5 +64,9 @@ namespace Self_Checkout_Simulator
             }
             return false;
         }
+        public int numberOfOccurances(string search)
+        {
+            return products.Where(x => x.GetName().Equals(search)).Count(); ;
+        }
     }
 }
