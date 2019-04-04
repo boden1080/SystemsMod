@@ -10,6 +10,7 @@ namespace Self_Checkout_Simulator
         private int weight;
         private int expected;
         private int allowedDifference;
+        private double weightTolerance;
 
         private SelfCheckout selfCheckout;
 
@@ -21,7 +22,8 @@ namespace Self_Checkout_Simulator
 
         public bool IsWeightOk()
         {
-            if(expected == weight)
+            weightTolerance = (weight / 100) * 2;
+            if ((expected >= weight - weightTolerance) && (expected <= weight + weightTolerance))
             {
                 return true;
             }
@@ -39,17 +41,25 @@ namespace Self_Checkout_Simulator
         public void SetExpectedWeight(int expected)
         {
             this.expected = expected;
+            this.expected -= allowedDifference;
         }
 
-        public void OverrideWeight(int expected)
+        public void SetNewWeight(int expected)
         {
-            this.expected = weight;
+            weight = expected;
+        }
+
+        public void OverrideWeight()
+        {
+            allowedDifference += expected - weight;
+            expected = weight;
         }
 
         public void Reset()
         {
             weight = 0;
             expected = 0;
+            allowedDifference = 0;
         }
 
         public void LinkToSelfCheckout(SelfCheckout sc)
@@ -62,7 +72,7 @@ namespace Self_Checkout_Simulator
         public void WeightChangeDetected(int weight)
         {
             this.weight += weight;
-            selfCheckout.BaggingAreaWeightChanged(weight);
+            selfCheckout.BaggingAreaWeightChanged();
         }
     }
 }
