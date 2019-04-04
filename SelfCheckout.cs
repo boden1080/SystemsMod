@@ -30,7 +30,7 @@ namespace Self_Checkout_Simulator
 
         public void LooseItemAreaWeightChanged(int weightOfLooseItem)
         {
-            ProductsDAO.GetRandomLooseProduct();
+            currentProduct = ProductsDAO.GetRandomLooseProduct();
             currentProduct.SetWeight(weightOfLooseItem);
             scannedProducts.Add(currentProduct);
             baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
@@ -39,13 +39,14 @@ namespace Self_Checkout_Simulator
 
         public void BarcodeWasScanned(int barcode)
         {
-            scannedProducts.Add(ProductsDAO.SearchUsingBarcode(barcode));
+            currentProduct = ProductsDAO.SearchUsingBarcode(barcode);
+            scannedProducts.Add(currentProduct);
             baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
         }
 
-        public void BaggingAreaWeightChanged(int weight)
+        public void BaggingAreaWeightChanged()
         {
-            // TODO
+            currentProduct = null;
         }
 
         public void UserPaid()
@@ -54,16 +55,58 @@ namespace Self_Checkout_Simulator
             baggingArea.Reset();
         }
 
+        public void UserRemoved(int index)
+        {
+            currentProduct = scannedProducts.GetProduct(index);
+            scannedProducts.Remove(currentProduct);
+            baggingArea.SetExpectedWeight(scannedProducts.CalculateWeight());
+            baggingArea.SetNewWeight(scannedProducts.CalculateWeight());
+            currentProduct = null;
+        }
+
         public string GetPromptForUser()
         {
-            // TODO: Use the information we have to produce the correct message
-            //       e.g. "Scan an item.", "Place item on scale.", etc.
+            if (!baggingArea.IsWeightOk())
+            {
+                if (currentProduct == null)
+                {
+                    return "Please wait, assistant is on the way";
+                }
+                else
+                {
+                    return "Place the item in the bagging area";
+                }
+            }
+            else if (looseItemScale.IsEnabled())
+            {
+                return "Place item on scale";
+            }
+            else if (currentProduct == null)
+            {
+                if (scannedProducts.HasItems())
+                {
+                    return "Scan an item or pay";
+                }
+                else
+                {
+                    return "Scan an item";
+                }
+            }
+            else if (currentProduct != null)
+            {
+                return "Place the item in the bagging area";
+            }
             return "ERROR: Unknown state!";
         }
 
         public Product GetCurrentProduct()
         {
             return currentProduct;
+        }
+
+        public void AdminOverrideWeight()
+        {
+            baggingArea.OverrideWeight();
         }
     }
 }
