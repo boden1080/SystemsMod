@@ -28,8 +28,12 @@ namespace Self_Checkout_Simulator
 
         public int CalculatePrice()
         {
-            // TODO
-            return 0;
+            int price = 0;
+            foreach (Product p in products)
+            {
+                price += p.CalculatePrice();
+            }
+            return price;
         }
 
         public void Reset()
