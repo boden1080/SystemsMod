@@ -40,7 +40,7 @@ namespace Self_Checkout_Simulator
             return weightInGrams;
         }
 
-        public int CalculatePrice()
+        public virtual int CalculatePrice()
         {
             return 0;
         }
@@ -50,8 +50,6 @@ namespace Self_Checkout_Simulator
             this.weightInGrams = weightInGrams;
 
         }
-
-        // TODO: Use the class diagram for details of other operations
     }
 
     class PackagedProduct : Product
@@ -66,8 +64,15 @@ namespace Self_Checkout_Simulator
             this.priceInPence = priceInPence;
             this.weightInGrams = weightInGrams;
         }
+        public override int CalculatePrice()
+        {
+            return priceInPence;
+        }
 
-       
+        public bool isLooseProduct()
+        {
+            return false;
+        }
     }
 
     class LooseProduct : Product
@@ -88,6 +93,15 @@ namespace Self_Checkout_Simulator
             return pencePer100g;
         }
 
-        // TODO: Use the class diagram for details of operations
+        public override int CalculatePrice()
+        {
+            double weightIn100Grams = Convert.ToDouble(weightInGrams) / 100;
+            return Convert.ToInt32(weightIn100Grams * pencePer100g);
+        }
+
+        public bool isLooseProduct()
+        {
+            return true;
+        }
     }
 }
