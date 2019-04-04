@@ -112,9 +112,25 @@ namespace Self_Checkout_Simulator
         void UpdateDisplay()
         {
             lbBasket.Items.Clear();
-            foreach (Product p in scannedProducts.GetProducts())
+            string currentName;
+            int x;
+            bool alreadyAdded;
+            foreach(Product p in scannedProducts.GetProducts())
             {
-                lbBasket.Items.Add(p.GetName());
+                currentName = p.GetName();
+                x = scannedProducts.numberOfOccurances(currentName);
+                alreadyAdded = false;
+                foreach(string s in lbBasket.Items)
+                {
+                    if(s.Substring(0, currentName.Length) == currentName)
+                    {
+                        alreadyAdded = true;
+                    }
+                }
+                if(alreadyAdded == false)
+                {
+                    lbBasket.Items.Add(currentName + " x" + x);
+                }
             }
             lblScreen.Text = selfCheckout.GetPromptForUser();
             lblTotalPrice.Text = string.Format("{0:C2}", (Convert.ToDecimal(scannedProducts.CalculatePrice()) / 100));
